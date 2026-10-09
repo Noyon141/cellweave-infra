@@ -1,0 +1,2 @@
+cloudflare_account_id = "your_cloudflare_staging_account_id"
+neon_region_id        = "aws-us-east-2"

@@ -1,0 +1,38 @@
+# Reusable CI Template for cellweave-orchestrator
+# Builds and validates always-on Temporal worker and activities
+
+name: Orchestrator CI
+
+on:
+  workflow_call:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js & pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint Check
+        run: pnpm lint
+
+      - name: TypeScript Typecheck
+        run: pnpm typecheck
+
+      - name: Workflow & Activity Unit Tests
+        run: pnpm test
+
+      - name: Worker Container Build
+        run: docker build -t cellweave-orchestrator:${{ github.sha }} -f Dockerfile .

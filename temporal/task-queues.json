@@ -1,0 +1,36 @@
+{
+  "stage1": {
+    "queues": [
+      {
+        "name": "cellweave-analysis-queue",
+        "description": "Unified workflow and activity queue for Stage 1 production deployment",
+        "worker_concurrency": 20
+      }
+    ]
+  },
+  "stage2": {
+    "description": "Resource-partitioned task queues for high-scale multi-worker routing",
+    "queues": [
+      {
+        "name": "cellweave-standard-queue",
+        "description": "General workflow tasks and lightweight CPU activities",
+        "worker_concurrency": 50
+      },
+      {
+        "name": "cellweave-highmem-queue",
+        "description": "High memory consumption data operations and large matrix manipulations",
+        "worker_concurrency": 10
+      },
+      {
+        "name": "cellweave-gpu-queue",
+        "description": "GPU-accelerated activities dispatching to Modal GPU containers",
+        "worker_concurrency": 5
+      },
+      {
+        "name": "cellweave-enterprise-queue",
+        "description": "Isolated priority queue for dedicated enterprise customer workflows",
+        "worker_concurrency": 20
+      }
+    ]
+  }
+}

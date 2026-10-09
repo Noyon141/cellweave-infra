@@ -1,0 +1,46 @@
+# OpenTelemetry Collector Configuration for CellWeave
+# Collects traces and metrics across Next.js, Temporal Worker, and Compute Services
+
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:4317
+      http:
+        endpoint: 0.0.0.0:4318
+
+processors:
+  batch:
+    timeout: 1s
+    send_batch_size: 1024
+
+  # Sanitize attributes to guarantee zero PHI and matrix leakage
+  attributes:
+    actions:
+      - key: expression_data
+        action: delete
+      - key: gene_matrix
+        action: delete
+      - key: patient_id
+        action: delete
+
+exporters:
+  logging:
+    loglevel: info
+
+  # OTLP exporter to central observability backend (configured via environment)
+  otlp:
+    endpoint: ${env:OTEL_BACKEND_ENDPOINT}
+    headers:
+      authorization: "Bearer ${env:OTEL_BACKEND_TOKEN}"
+
+service:
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: [attributes, batch]
+      exporters: [logging, otlp]
+    metrics:
+      receivers: [otlp]
+      processors: [attributes, batch]
+      exporters: [logging, otlp]

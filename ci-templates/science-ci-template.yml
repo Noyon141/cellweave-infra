@@ -1,0 +1,54 @@
+# Reusable CI Template for cellweave-science
+# Implements Section 100: Python lint -> type checks -> unit tests -> scientific regression suite -> golden dataset tests -> container build -> SBOM -> vulnerability scan -> benchmark
+
+name: Science Engine CI & Regression Gate
+
+on:
+  workflow_call:
+
+jobs:
+  scientific-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-dev.txt
+
+      - name: Lint (Ruff)
+        run: ruff check .
+
+      - name: Type Check (mypy / pyright)
+        run: mypy cellweave_science
+
+      - name: Unit Tests
+        run: pytest tests/unit
+
+      - name: Scientific Regression Suite (Golden Datasets)
+        run: pytest tests/regression/golden_datasets
+
+      - name: Build Container Image
+        run: docker build -t cellweave-science:${{ github.sha }} .
+
+      - name: Generate SBOM
+        uses: anchore/sbom-action@v0
+        with:
+          image: cellweave-science:${{ github.sha }}
+
+      - name: Container Vulnerability Scan
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: cellweave-science:${{ github.sha }}
+          severity: 'CRITICAL,HIGH'
+          exit-code: '1'
+
+      - name: Performance & Memory Benchmark Suite
+        run: pytest tests/benchmarks

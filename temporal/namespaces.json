@@ -1,0 +1,34 @@
+{
+  "namespaces": [
+    {
+      "name": "default",
+      "environment": "local",
+      "retention_days": 1,
+      "description": "Local development temporal server namespace"
+    },
+    {
+      "name": "cellweave-dev",
+      "environment": "development",
+      "retention_days": 7,
+      "description": "Temporal Cloud development namespace for CI and testing"
+    },
+    {
+      "name": "cellweave-staging",
+      "environment": "staging",
+      "retention_days": 14,
+      "description": "Temporal Cloud staging namespace preserving production topology"
+    },
+    {
+      "name": "cellweave-prod",
+      "environment": "production",
+      "retention_days": 30,
+      "description": "Temporal Cloud production namespace for commercial customer workflows"
+    },
+    {
+      "name": "cellweave-preview",
+      "environment": "preview",
+      "retention_days": 3,
+      "description": "Temporal Cloud preview namespace for PR validation"
+    }
+  ]
+}

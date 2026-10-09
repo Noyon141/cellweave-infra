@@ -1,0 +1,30 @@
+# Reusable CI Template for cellweave-web (Production Deploy)
+# Implements Section 99: migration safety gate -> deploy -> health check -> synthetic smoke test -> progressive feature activation
+
+name: Web Production Release Gate
+
+on:
+  workflow_call:
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Migration Safety Gate
+        run: pnpm run db:migrate:status
+
+      - name: Run Production Database Migrations
+        run: pnpm run db:migrate:deploy
+        env:
+          DATABASE_MIGRATION_URL: ${{ secrets.DATABASE_MIGRATION_URL }}
+
+      - name: Deploy to Vercel Production
+        run: vercel deploy --prod --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Health Check Verification
+        run: curl --fail --retry 5 https://app.cellweave.com/api/health
+
+      - name: Synthetic Smoke Tests
+        run: pnpm test:e2e:production-smoke

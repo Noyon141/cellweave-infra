@@ -1,0 +1,59 @@
+# CellWeave Infrastructure & Application Alert Rules
+# Mapped to Incident Severity Levels (SEV-1 through SEV-4)
+
+groups:
+  - name: cellweave-critical-alerts
+    rules:
+      - alert: CrossTenantAccessDetected
+        expr: sum(rate(cellweave_cross_tenant_access_attempts_total[5m])) > 0
+        for: 0m
+        labels:
+          severity: SEV-1
+        annotations:
+          summary: "Potential cross-tenant access violation detected"
+          description: "An authorization check failed indicating an attempted IDOR or cross-tenant query."
+
+      - alert: WorkflowDurabilityDrop
+        expr: (sum(rate(temporal_workflow_failed_total{error_type="PLATFORM_ERROR"}[15m])) / sum(rate(temporal_workflow_started_total[15m]))) > 0.05
+        for: 5m
+        labels:
+          severity: SEV-2
+        annotations:
+          summary: "Analysis workflow platform failure spike"
+          description: "Workflows failing due to infrastructure issues exceed 5% over 15 minutes."
+
+      - alert: DatabaseConnectionExhaustion
+        expr: pg_stat_activity_count / pg_settings_max_connections > 0.85
+        for: 2m
+        labels:
+          severity: SEV-2
+        annotations:
+          summary: "Neon PostgreSQL connection saturation"
+          description: "Active database connections exceed 85% of total pool limit."
+
+      - alert: R2StorageFailureRateSpike
+        expr: sum(rate(r2_request_errors_total[5m])) / sum(rate(r2_requests_total[5m])) > 0.01
+        for: 5m
+        labels:
+          severity: SEV-2
+        annotations:
+          summary: "Cloudflare R2 operation failure spike"
+          description: "R2 presigned upload or artifact retrieval failures exceed 1%."
+
+      - alert: PolarWebhookSyncLag
+        expr: max(time() - polar_webhook_last_processed_timestamp) > 3600
+        for: 10m
+        labels:
+          severity: SEV-3
+        annotations:
+          summary: "Polar billing webhook processing delay"
+          description: "Polar events pending in outbox have not synced in > 1 hour."
+
+      - alert: OrchestratorWorkerDown
+        expr: up{job="cellweave-orchestrator-worker"} == 0
+        for: 2m
+        labels:
+          severity: SEV-2
+        annotations:
+          summary: "Always-on Temporal worker offline"
+          description: "No active Temporal orchestrator worker instances reporting healthy status."

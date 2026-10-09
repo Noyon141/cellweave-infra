@@ -1,0 +1,30 @@
+name: Infrastructure Plan
+
+on:
+  pull_request:
+    paths:
+      - 'terraform/**'
+
+jobs:
+  plan:
+    name: Terraform / OpenTofu Plan
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        environment: [development, staging]
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup OpenTofu
+        uses: opentofu/setup-opentofu@v1
+        with:
+          tofu_version: 1.6.2
+
+      - name: OpenTofu Init (${{ matrix.environment }})
+        working-directory: terraform/environments/${{ matrix.environment }}
+        run: tofu init -backend=false
+
+      - name: OpenTofu Validate (${{ matrix.environment }})
+        working-directory: terraform/environments/${{ matrix.environment }}
+        run: tofu validate

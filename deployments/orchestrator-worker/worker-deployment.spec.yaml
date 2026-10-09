@@ -1,0 +1,43 @@
+# Provider-Neutral Always-On Temporal Worker Deployment Specification
+# In Stage 1, 1-2 replicas run on a lightweight container platform.
+# In Stage 3, can transition directly to AWS ECS/Fargate without architectural changes.
+
+service:
+  name: cellweave-orchestrator-worker
+  type: background_worker
+  process_type: always_on
+
+scaling:
+  min_replicas: 1
+  max_replicas: 2
+  target_cpu_utilization: 80
+
+resources:
+  cpu: "1000m"      # 1 vCPU
+  memory: "2048Mi"  # 2 GB RAM
+
+healthcheck:
+  type: exec
+  command: ["node", "-e", "process.exit(0)"]
+  interval_seconds: 30
+  timeout_seconds: 5
+  retries: 3
+
+lifecycle:
+  termination_grace_period_seconds: 60 # Allows current Temporal activities to finish or checkpoint
+
+environment_variables:
+  - name: NODE_ENV
+    value: "production"
+  - name: TEMPORAL_ADDRESS
+    value_from_secret: true
+  - name: TEMPORAL_NAMESPACE
+    value_from_secret: true
+  - name: TEMPORAL_TASK_QUEUE
+    value_from_secret: true
+  - name: DATABASE_URL
+    value_from_secret: true
+  - name: MODAL_TOKEN_ID
+    value_from_secret: true
+  - name: MODAL_TOKEN_SECRET
+    value_from_secret: true

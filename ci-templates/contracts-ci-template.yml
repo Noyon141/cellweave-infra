@@ -1,0 +1,44 @@
+# Reusable CI Template for cellweave-contracts
+# Validates schema consistency and ensures code generation parity
+
+name: Contracts CI
+
+on:
+  workflow_call:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js & pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Validate OpenAPI 3.1 & JSON Schemas
+        run: pnpm run validate:schemas
+
+      - name: Verify TypeScript Typegen Parity
+        run: |
+          pnpm run generate:ts
+          git diff --exit-code
+
+      - name: Verify Python Pydantic Modelgen Parity
+        run: |
+          pnpm run generate:py
+          git diff --exit-code
