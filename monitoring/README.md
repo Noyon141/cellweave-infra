@@ -21,7 +21,7 @@
 
 ## Service Level Objectives (SLOs)
 
-| Metric | Target | Error Budget (30-day) |
+| Metric | Target | Monthly Error Budget |
 |---|---|---|
 | **Web / API Monthly Availability** | 99.9% | ~43.2 minutes |
 | **Workflow Request Durability** | > 99.99% | < 0.01% lost jobs |

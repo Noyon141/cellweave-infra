@@ -16,4 +16,4 @@ CellWeave relies on Cloudflare R2 for zero-egress, high-durability object storag
    - Client requests download -> CellWeave API verifies tenant & project permissions -> generates short-lived signed GET URL (expiration <= 15 minutes) -> Client downloads directly from R2.
 4. **Lifecycle & Quarantine:**
    - Unverified uploads land in a logical quarantine status.
-   - Multipart abort rules automatically clear incomplete multipart upload parts after 7 days.
+   - Lifecycle and reconciliation rules automatically clear orphaned multipart upload parts according to storage policy.

@@ -26,7 +26,7 @@ module "neon_db" {
   project_name              = "cellweave-dev"
   region_id                 = var.neon_region_id
   branch_name               = "development"
-  history_retention_seconds = 86400 # 1 day for dev
+  history_retention_seconds = var.neon_history_retention_seconds
   min_cu                    = 0.25
   max_cu                    = 1.0
 }
@@ -34,6 +34,6 @@ module "neon_db" {
 module "temporal_namespace" {
   source         = "../../modules/temporal_namespace"
   namespace_name = "cellweave-dev"
-  retention_days = 7
+  retention_days = var.temporal_retention_days
   environment    = "development"
 }

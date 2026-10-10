@@ -26,7 +26,7 @@ module "neon_db" {
   project_name              = "cellweave-prod"
   region_id                 = var.neon_region_id
   branch_name               = "main"
-  history_retention_seconds = 2592000 # 30 days PITR for production
+  history_retention_seconds = var.neon_history_retention_seconds
   min_cu                    = 0.5
   max_cu                    = 4.0
 }
@@ -34,6 +34,6 @@ module "neon_db" {
 module "temporal_namespace" {
   source         = "../../modules/temporal_namespace"
   namespace_name = "cellweave-prod"
-  retention_days = 30
+  retention_days = var.temporal_retention_days
   environment    = "production"
 }

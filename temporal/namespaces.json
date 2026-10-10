@@ -21,8 +21,8 @@
     {
       "name": "cellweave-prod",
       "environment": "production",
-      "retention_days": 30,
-      "description": "Temporal Cloud production namespace for commercial customer workflows"
+      "retention_days": 7,
+      "description": "Temporal Cloud production namespace (retention period configured by operator)"
     },
     {
       "name": "cellweave-preview",

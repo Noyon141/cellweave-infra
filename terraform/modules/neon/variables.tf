@@ -16,7 +16,7 @@ variable "branch_name" {
 }
 
 variable "history_retention_seconds" {
-  description = "Point-in-time recovery (PITR) retention window in seconds (default: 86400 = 1 day)"
+  description = "Point-in-time recovery (PITR) retention window in seconds"
   type        = number
   default     = 86400
 }

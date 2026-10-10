@@ -1,2 +1,4 @@
-cloudflare_account_id = "your_cloudflare_dev_account_id"
-neon_region_id        = "aws-us-east-2"
+cloudflare_account_id          = "your_cloudflare_dev_account_id"
+neon_region_id                 = "aws-us-east-2"
+neon_history_retention_seconds = 86400 # Operator-configured PITR retention (e.g. 1 day for dev)
+temporal_retention_days        = 7     # Operator-configured Temporal workflow retention

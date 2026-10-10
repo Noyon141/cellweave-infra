@@ -31,7 +31,7 @@ Infrastructure Lead / On-Call Site Reliability Engineer.
 
 ## 7. Customer Communication Criteria
 - Update public status page within 15 minutes of downtime.
-- Notify active organization administrators if downtime exceeds 30 minutes.
+- Notify active organization administrators if downtime exceeds established communication threshold.
 
 ## 8. Evidence Preservation
 - Export Neon query performance logs and PostgreSQL error logs from the incident window.

@@ -26,7 +26,7 @@ module "neon_db" {
   project_name              = "cellweave-staging"
   region_id                 = var.neon_region_id
   branch_name               = "staging"
-  history_retention_seconds = 604800 # 7 days PITR for staging
+  history_retention_seconds = var.neon_history_retention_seconds
   min_cu                    = 0.25
   max_cu                    = 2.0
 }
@@ -34,6 +34,6 @@ module "neon_db" {
 module "temporal_namespace" {
   source         = "../../modules/temporal_namespace"
   namespace_name = "cellweave-staging"
-  retention_days = 14
+  retention_days = var.temporal_retention_days
   environment    = "staging"
 }

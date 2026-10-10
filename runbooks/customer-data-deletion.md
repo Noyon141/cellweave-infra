@@ -2,7 +2,7 @@
 
 ## 1. Detection Signals
 - Scheduled `data_deletion_jobs` task fails or enters `FAILED` status.
-- Alert fires on stuck deletion job pending > 48 hours.
+- Alert fires on stuck deletion job exceeding configured execution threshold.
 - Customer Organization Owner requests organization deletion via settings.
 
 ## 2. Severity Classification
@@ -18,7 +18,7 @@ Security Lead / Infrastructure Lead.
 
 ## 5. Recovery
 1. Follow designed deletion lifecycle:
-   `ACTIVE` -> `SOFT_DELETED` -> `RECOVERY_WINDOW` (30-day grace) -> `PURGE_PENDING` -> `PURGED`.
+   `ACTIVE` -> `SOFT_DELETED` -> `RECOVERY_WINDOW` (configuration-defined / plan-governed grace period) -> `PURGE_PENDING` -> `PURGED`.
 2. Ensure Organization Owner authentication, MFA confirmation, and confirmation token verification took place.
 3. Execute phased purge worker:
    - Phase A: Delete R2 objects under `org/{orgId}/` prefix.
