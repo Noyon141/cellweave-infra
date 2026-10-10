@@ -34,7 +34,7 @@ Security Officer / Lead Infrastructure Engineer.
 3. Audit access logs for unauthorized read/write activity during the compromise window.
 
 ## 7. Customer Communication Criteria
-- If customer data exposure is confirmed, initiate customer security notification within legal compliance window (e.g. 72 hours under GDPR / state notification laws).
+- If customer data exposure is confirmed, initiate customer security notification in accordance with customer agreement obligations.
 
 ## 8. Evidence Preservation
 - Export cloud provider audit trails, IP access logs, and git commit history containing the leak.

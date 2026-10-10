@@ -3,14 +3,14 @@
 ## 1. Detection Signals
 - Scheduled `data_deletion_jobs` task fails or enters `FAILED` status.
 - Alert fires on stuck deletion job pending > 48 hours.
-- Customer Owner issues formal GDPR / CCPA right-to-be-forgotten request.
+- Customer Organization Owner requests organization deletion via settings.
 
 ## 2. Severity Classification
 - **SEV-3** for individual job delays.
 - **SEV-1** if deletion affects resources of a different tenant (cross-tenant contamination).
 
 ## 3. Owner
-Data Protection Officer / Infrastructure Lead.
+Security Lead / Infrastructure Lead.
 
 ## 4. Immediate Containment
 1. If cross-tenant deletion risk is suspected, IMMEDIATELY halt the `data_deletion_jobs` background worker.
@@ -33,7 +33,7 @@ Data Protection Officer / Infrastructure Lead.
 3. Confirm adjacent tenant records remain 100% untouched.
 
 ## 7. Customer Communication Criteria
-- Send signed Certificate of Deletion to Organization Owner upon purge completion.
+- Send confirmation of completed organization purge to Organization Owner upon purge completion.
 
 ## 8. Evidence Preservation
 - Retain cryptographic audit log entry recording deletion execution time, actor ID, and purged object count.

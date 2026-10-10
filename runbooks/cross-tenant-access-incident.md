@@ -29,7 +29,7 @@ Chief Information Security Officer (CISO) / Lead Application Architect.
 2. Confirm cross-tenant requests strictly return HTTP 403 / 404 with zero data leakage.
 
 ## 7. Customer Communication Criteria
-- Under guidance of legal counsel and security policy, notify impacted organizations whose data was viewed or accessed during the incident window within 72 hours.
+- In consultation with leadership and legal counsel, promptly notify impacted customer organizations whose data was viewed or accessed during the incident window.
 
 ## 8. Evidence Preservation
 - Export full HTTP request logs, database query logs, and affected data row IDs during the exposure window for forensic audit.

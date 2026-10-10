@@ -1,59 +1,59 @@
-# CellWeave Infrastructure & Application Alert Rules
-# Mapped to Incident Severity Levels (SEV-1 through SEV-4)
+# CellWeave Logical Alert Definitions
+# Mapped to System Design Incident Severity Levels (SEV-1 through SEV-4)
+# Note: The authoritative design does not select a specific alerting vendor (DO-NOT-GUESS).
+# These definitions specify the vendor-neutral logical triggers, evaluation criteria, and severities.
 
-groups:
-  - name: cellweave-critical-alerts
-    rules:
-      - alert: CrossTenantAccessDetected
-        expr: sum(rate(cellweave_cross_tenant_access_attempts_total[5m])) > 0
-        for: 0m
-        labels:
-          severity: SEV-1
-        annotations:
-          summary: "Potential cross-tenant access violation detected"
-          description: "An authorization check failed indicating an attempted IDOR or cross-tenant query."
+alerts:
+  - id: cross_tenant_access_detected
+    name: Cross-Tenant Access Violation Detected
+    severity: SEV-1
+    signal: cellweave_cross_tenant_access_attempts
+    condition: "event_count > 0"
+    evaluation_window: "immediate (0s)"
+    summary: "Potential cross-tenant access violation detected"
+    description: "An authorization check failed indicating an attempted IDOR or cross-tenant query."
 
-      - alert: WorkflowDurabilityDrop
-        expr: (sum(rate(temporal_workflow_failed_total{error_type="PLATFORM_ERROR"}[15m])) / sum(rate(temporal_workflow_started_total[15m]))) > 0.05
-        for: 5m
-        labels:
-          severity: SEV-2
-        annotations:
-          summary: "Analysis workflow platform failure spike"
-          description: "Workflows failing due to infrastructure issues exceed 5% over 15 minutes."
+  - id: workflow_durability_drop
+    name: Analysis Workflow Platform Failure Spike
+    severity: SEV-2
+    signal: "temporal_workflow_failed{error_type='PLATFORM_ERROR'} / temporal_workflow_started"
+    condition: "failure_ratio > 0.05 (5%)"
+    evaluation_window: "15m"
+    summary: "Analysis workflow platform failure spike"
+    description: "Workflows failing due to infrastructure/platform issues exceed 5% over 15 minutes."
 
-      - alert: DatabaseConnectionExhaustion
-        expr: pg_stat_activity_count / pg_settings_max_connections > 0.85
-        for: 2m
-        labels:
-          severity: SEV-2
-        annotations:
-          summary: "Neon PostgreSQL connection saturation"
-          description: "Active database connections exceed 85% of total pool limit."
+  - id: database_connection_exhaustion
+    name: PostgreSQL Connection Pool Saturation
+    severity: SEV-2
+    signal: "pg_active_connections / pg_max_connections"
+    condition: "saturation_ratio > 0.85 (85%)"
+    evaluation_window: "2m"
+    summary: "Neon PostgreSQL connection saturation"
+    description: "Active database connections exceed 85% of total pool limit."
 
-      - alert: R2StorageFailureRateSpike
-        expr: sum(rate(r2_request_errors_total[5m])) / sum(rate(r2_requests_total[5m])) > 0.01
-        for: 5m
-        labels:
-          severity: SEV-2
-        annotations:
-          summary: "Cloudflare R2 operation failure spike"
-          description: "R2 presigned upload or artifact retrieval failures exceed 1%."
+  - id: r2_storage_failure_spike
+    name: Cloudflare R2 Operation Failure Spike
+    severity: SEV-2
+    signal: "r2_request_errors / r2_total_requests"
+    condition: "error_ratio > 0.01 (1%)"
+    evaluation_window: "5m"
+    summary: "Cloudflare R2 operation failure spike"
+    description: "R2 presigned upload or artifact retrieval failures exceed 1%."
 
-      - alert: PolarWebhookSyncLag
-        expr: max(time() - polar_webhook_last_processed_timestamp) > 3600
-        for: 10m
-        labels:
-          severity: SEV-3
-        annotations:
-          summary: "Polar billing webhook processing delay"
-          description: "Polar events pending in outbox have not synced in > 1 hour."
+  - id: polar_webhook_sync_lag
+    name: Polar Billing Outbox Processing Lag
+    severity: SEV-3
+    signal: "current_time - polar_webhook_last_processed_timestamp"
+    condition: "lag_duration > 3600s (1 hour)"
+    evaluation_window: "10m"
+    summary: "Polar billing webhook processing delay"
+    description: "Polar events pending in outbox have not synced in > 1 hour."
 
-      - alert: OrchestratorWorkerDown
-        expr: up{job="cellweave-orchestrator-worker"} == 0
-        for: 2m
-        labels:
-          severity: SEV-2
-        annotations:
-          summary: "Always-on Temporal worker offline"
-          description: "No active Temporal orchestrator worker instances reporting healthy status."
+  - id: orchestrator_worker_offline
+    name: Always-On Orchestrator Worker Offline
+    severity: SEV-2
+    signal: "orchestrator_worker_healthy_instances"
+    condition: "healthy_instance_count == 0"
+    evaluation_window: "2m"
+    summary: "Always-on Temporal worker offline"
+    description: "No active Temporal orchestrator worker instances reporting healthy status."

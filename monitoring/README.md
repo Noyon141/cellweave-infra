@@ -32,3 +32,8 @@
 ## Error Classification
 - `PLATFORM_ERROR`: Infrastructure failures, cloud provider outages, network partitions, unhandled exceptions. Triggers platform alerting.
 - `SCIENTIFIC_VALIDATION_ERROR`: Malformed input matrices, insufficient biological replicates, unmapped gene keys. Displayed to user as actionable scientific guidance; does NOT count against platform SLOs.
+
+## Alerting Architecture & Vendor Neutrality
+In accordance with `DO-NOT-GUESS.md`, the authoritative design fixes the required error classifications, SLO targets, and severity escalation rules (SEV-1 through SEV-4), but deliberately leaves the exact alerting platform/vendor unspecified.
+
+Logical alert conditions, evaluation thresholds, and severities are defined in [`alerts/alert-rules.yaml`](./alerts/alert-rules.yaml) in a vendor-neutral format. Adapting these definitions to an operational notification service (e.g., PagerDuty, Opsgenie, Grafana OnCall, or cloud-native notification queues) remains an Operator Decision.
