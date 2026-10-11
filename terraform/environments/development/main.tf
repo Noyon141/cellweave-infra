@@ -27,8 +27,8 @@ module "neon_db" {
   region_id                 = var.neon_region_id
   branch_name               = "development"
   history_retention_seconds = var.neon_history_retention_seconds
-  min_cu                    = 0.25
-  max_cu                    = 1.0
+  min_cu                    = var.neon_min_cu
+  max_cu                    = var.neon_max_cu
 }
 
 module "temporal_namespace" {

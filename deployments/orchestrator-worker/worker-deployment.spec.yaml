@@ -35,6 +35,8 @@ environment_variables:
     value_from_secret: true
   - name: TEMPORAL_TASK_QUEUE
     value_from_secret: true
+  - name: TEMPORAL_API_KEY
+    value_from_secret: true
   - name: DATABASE_URL
     value_from_secret: true
   - name: MODAL_TOKEN_ID
