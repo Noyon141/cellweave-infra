@@ -1,0 +1,4 @@
+# Backend configuration parameters for tofu init -backend-config=backend.hcl
+# Credentials (AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY) must be passed via environment variables.
+
+endpoint = "https://<CLOUDFLARE_ACCOUNT_ID>.r2.cloudflarestorage.com"

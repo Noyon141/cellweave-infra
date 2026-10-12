@@ -1,6 +1,8 @@
 # Local Terraform / OpenTofu files
 *.tfvars
 !*.tfvars.example
+backend.hcl
+!backend.hcl.example
 *.tfstate
 *.tfstate.*
 .terraform/
