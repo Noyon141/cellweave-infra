@@ -1,3 +1,12 @@
+terraform {
+  required_providers {
+    cloudflare = {
+      source  = "cloudflare/cloudflare"
+      version = "~> 4.35"
+    }
+  }
+}
+
 resource "cloudflare_r2_bucket" "scientific_artifacts" {
   account_id = var.account_id
   name       = var.bucket_name

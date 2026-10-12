@@ -9,7 +9,6 @@ variable "namespace_name" {
 variable "retention_days" {
   description = "Workflow execution history retention period in days"
   type        = number
-  default     = 7
 }
 
 variable "environment" {

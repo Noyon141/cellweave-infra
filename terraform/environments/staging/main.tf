@@ -18,7 +18,7 @@ module "r2_artifacts" {
   account_id  = var.cloudflare_account_id
   bucket_name = "cellweave-artifacts-staging"
   environment = "staging"
-  location    = "wnam"
+  location    = "WNAM"
 }
 
 module "neon_db" {

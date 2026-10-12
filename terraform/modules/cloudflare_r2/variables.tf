@@ -11,7 +11,7 @@ variable "bucket_name" {
 variable "location" {
   description = "Geographic location hint for R2 bucket"
   type        = string
-  default     = "wnam" # Western North America (or enam for Eastern North America)
+  default     = "WNAM" # Western North America (or ENAM for Eastern North America)
 }
 
 variable "environment" {

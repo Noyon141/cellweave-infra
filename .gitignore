@@ -1,0 +1,22 @@
+# Local Terraform / OpenTofu files
+*.tfvars
+!*.tfvars.example
+*.tfstate
+*.tfstate.*
+.terraform/
+.terraform.lock.hcl
+.tofu/
+
+# Local environment & secret files
+.env
+.env.*
+!.env.*.example
+*.pem
+*.key
+
+# OS and editor files
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/

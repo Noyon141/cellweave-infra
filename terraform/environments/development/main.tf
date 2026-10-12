@@ -13,12 +13,16 @@ terraform {
   }
 }
 
+provider "cloudflare" {}
+
+provider "neon" {}
+
 module "r2_artifacts" {
   source      = "../../modules/cloudflare_r2"
   account_id  = var.cloudflare_account_id
   bucket_name = "cellweave-artifacts-dev"
   environment = "development"
-  location    = "wnam"
+  location    = "WNAM"
 }
 
 module "neon_db" {
