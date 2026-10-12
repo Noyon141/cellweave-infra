@@ -5,6 +5,7 @@ backend.hcl
 !backend.hcl.example
 *.tfstate
 *.tfstate.*
+*.tfplan
 .terraform/
 .terraform.lock.hcl
 .tofu/
